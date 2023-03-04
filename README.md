@@ -14,7 +14,7 @@
 
 ### Run locally
 1. Create db with name `eshop` in postgres
-2. Set environments variables DB_HOST, DB_USERNAME and DB_PASSWORD according to your db settings
+2. Set environments variables `DB_HOST`, `DB_USERNAME` and `DB_PASSWORD` according to your db settings
 
 ## Features
 
