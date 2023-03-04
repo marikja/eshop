@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - eshop-network
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: eshop
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  eshop:
+    image: eshop
+    ports:
+      - "8080:8080"
+    networks:
+      - eshop-network
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+
+networks:
+  eshop-network:
+
+volumes:
+  db:
+    driver: local

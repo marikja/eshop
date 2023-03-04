@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="add_version_column" author="Jana Marikova" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="phone"/>
+                <not>
+                    <columnExists tableName="phone" columnName="version"/>
+                </not>
+            </and>
+        </preConditions>
+
+        <addColumn tableName="phone">
+            <column name="version" type="int"/>
+        </addColumn>
+
+        <update tableName="phone">
+            <column name="version" value="0"/>
+            <where>version IS NULL</where>
+        </update>
+
+        <addNotNullConstraint tableName="phone" columnName="version"/>
+    </changeSet>
+
+    <changeSet id="add_index_brand_model" author="Jana Marikova" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="phone"/>
+        </preConditions>
+
+        <createIndex tableName="phone" indexName="brand_model_index">
+            <column name="brand"/>
+            <column name="model"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create_table_phone" author="Jana Marikova" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <not>
+                <tableExists tableName="phone"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="phone">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="phone_id_primary_key"/>
+            </column>
+            <column name="brand" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operating_system" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="blob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="phone" indexName="brand_model_index">
+            <column name="brand"/>
+            <column name="model"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
